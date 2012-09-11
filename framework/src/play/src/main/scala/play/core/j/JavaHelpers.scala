@@ -5,7 +5,6 @@ import play.mvc.{ Action => JAction, Result => JResult }
 import play.mvc.Http.{ Context => JContext, Request => JRequest, RequestBody => JBody, Cookies => JCookies, Cookie => JCookie }
 
 import scala.collection.JavaConverters._
-
 /**
  *
  * provides helper methods that manage java to scala Result and scala to java Context
@@ -15,6 +14,7 @@ trait JavaHelpers {
   import collection.JavaConverters._
   import play.api.mvc._
   import play.mvc.Http.RequestBody
+
 
   /**
    * creates a scala result from java context and result objects
