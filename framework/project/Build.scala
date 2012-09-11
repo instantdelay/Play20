@@ -136,7 +136,7 @@ object PlayBuild extends Build {
         publishArtifact in (Compile, packageSrc) := false,
         resolvers += typesafe
       )
-    ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*).dependsOn(SbtLinkProject, PlayUtilsProject, RoutesCompilerProject, PlayProject,  TemplatesProject, ConsoleProject)
+    ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*).dependsOn(SbtLinkProject, PlayUtilsProject, RoutesCompilerProject,  TemplatesProject, ConsoleProject)
 
 
     lazy val ConsoleProject = Project(
