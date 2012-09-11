@@ -29,13 +29,6 @@ import play.core.server.netty._
 
 import scala.collection.JavaConverters._
 
-/**
- * provides a stopable Server
- */
-trait ServerWithStop {
-  def stop(): Unit
-  def mainAddress: InetSocketAddress
-}
 
 /**
  * creates a Server implementation based Netty

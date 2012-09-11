@@ -13,11 +13,11 @@ object PlayProject extends Plugin with PlayExceptions with PlayKeys with PlayRel
   Option(System.getProperty("play.version")).map {
     case badVersion if badVersion != play.core.PlayVersion.current => {
       println(
-        Colors.red("""
-          |This project uses Play %s!
-          |Update the Play sbt-plugin version to %s (usually in project/plugins.sbt)
+        """|WARNING! WARNING! WARNING!
+           |This project uses Play %s!
+           |Update the Play sbt-plugin version to %s (usually in project/plugins.sbt)
         """.stripMargin.format(play.core.PlayVersion.current, badVersion))
-      )
+      
     }
     case _ =>
   }

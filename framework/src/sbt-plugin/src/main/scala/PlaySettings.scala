@@ -6,6 +6,9 @@ import PlayKeys._
 trait PlaySettings {
   this: PlayCommands =>
 
+
+  lazy val nettyServer = "play.core.server.NettyServer"
+  
   lazy val defaultJavaSettings = Seq[Setting[_]](
 
     templatesImport ++= Seq(
@@ -124,7 +127,7 @@ trait PlaySettings {
 
     copyResources in Compile <<= (copyResources in Compile, playCopyAssets) map { (r, pr) => r ++ pr },
 
-    mainClass in (Compile, run) := Some(classOf[play.core.server.NettyServer].getName),
+    mainClass in (Compile, run) := Some(nettyServer),
 
     compile in (Compile) <<= PostCompile(scope = Compile),
 
