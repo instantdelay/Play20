@@ -76,7 +76,7 @@ class ReloadableApplication(sbtLink: SBTLink) extends ApplicationProvider {
   println(play.utils.Colors.magenta("--- (Running the application from SBT, auto-reloading is enabled) ---"))
   println()
 
-  var lastState: Either[Throwable, Application] = Left(PlayException("Not initialized", "?"))
+  var lastState: Either[Throwable, Application] = Left(new PlayException("Not initialized", "?"))
 
   def get = {
 

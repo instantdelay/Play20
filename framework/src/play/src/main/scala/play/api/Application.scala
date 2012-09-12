@@ -73,7 +73,7 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
       javaGlobal.map(new j.JavaGlobalSettingsAdapter(_)).getOrElse(scalaGlobal)
     } catch {
       case e: PlayException => throw e
-      case e => throw PlayException(
+      case e => throw new PlayException(
         "Cannot init the Global object",
         e.getMessage,
         Some(e))
@@ -222,18 +222,18 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
             if (plugin.enabled) Some(plugin) else { Logger("play").warn("Plugin [" + className + "] is disabled"); None }
           } catch {
             case e: PlayException => throw e
-            case e => throw PlayException(
+            case e => throw new PlayException(
               "Cannot load plugin",
               "Plugin [" + className + "] cannot been instantiated.",
               Some(e))
           }
         }
-        case e: InvocationTargetException => throw PlayException(
+        case e: InvocationTargetException => throw new PlayException(
           "Cannot load plugin",
           "An exception occurred during Plugin [" + className + "] initialization",
           Some(e.getTargetException))
         case e: PlayException => throw e
-        case e => throw PlayException(
+        case e => throw new PlayException(
           "Cannot load plugin",
           "Plugin [" + className + "] cannot been instantiated.",
           Some(e))

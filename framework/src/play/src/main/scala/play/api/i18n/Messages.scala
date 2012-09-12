@@ -200,10 +200,10 @@ object Messages {
         case Success(messages, _) => messages
         case NoSuccess(message, in) => {
           throw new PlayException("Configuration error", message) with PlayException.ExceptionSource {
-            def line = Some(in.pos.line)
-            def position = Some(in.pos.column - 1)
-            def input = Some(messageInput)
-            def sourceName = Some(messageSourceName)
+            def line = in.pos.line
+            def position = in.pos.column - 1
+            def input = new java.io.ByteArrayInputStream(messageInput.bytes.toArray)
+            def sourceName = messageSourceName
           }
         }
       }

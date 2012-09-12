@@ -127,7 +127,7 @@
 
 				@source.sourceName.map { name =>
 					<h2>
-						In @name @source.line.map { line =>
+						In @name @Option(source.line).map { line =>
 							at line @line.
 						}
 					</h2>
