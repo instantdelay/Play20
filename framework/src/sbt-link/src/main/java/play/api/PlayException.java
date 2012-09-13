@@ -103,7 +103,7 @@ public class PlayException extends RuntimeException{
      *
      * @param border number of lines to use as a border
      */
-    public abstract Object interestingLines(int border);
+    public abstract InterestingLines interestingLines(int border);
   }
 
   /**
