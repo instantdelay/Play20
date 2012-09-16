@@ -133,7 +133,7 @@ public class PlayException extends RuntimeException{
   /**
    * Adds a rich HTML description to a Play exception.
    */
-  public static abstract class  RichDescription extends PlayException {
+  public static abstract class  RichDescription extends ExceptionAttachment {
     public RichDescription(String title, String description, Throwable cause) {
       super(title, description, cause);
     }

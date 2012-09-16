@@ -199,7 +199,7 @@ object Messages {
       parser(new CharSequenceReader(messageInput.slurpString + "\n")) match {
         case Success(messages, _) => messages
         case NoSuccess(message, in) => {
-          throw new PlayException("Configuration error", message) with PlayException.ExceptionSource {
+          throw new PlayException.ExceptionSource("Configuration error", message) with CalculateInterestingLines  {
             def line = in.pos.line
             def position = in.pos.column - 1
             def input = new java.io.ByteArrayInputStream(messageInput.bytes.toArray)

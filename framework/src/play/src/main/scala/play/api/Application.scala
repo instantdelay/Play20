@@ -76,7 +76,7 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
       case e => throw new PlayException(
         "Cannot init the Global object",
         e.getMessage,
-        Some(e))
+        e)
     }
   }
 
@@ -141,14 +141,14 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
 
         val source = sources.flatMap(_.sourceFor(e))
 
-        throw new PlayException(
+        throw new PlayException.ExceptionSource(
           "Execution exception",
           "[%s: %s]".format(e.getClass.getSimpleName, e.getMessage),
-          Some(e)) with PlayException.ExceptionSource {
-          def line = source.map(_._2)
-          def position = None
-          def input = source.map(_._1).map(scalax.file.Path(_))
-          def sourceName = source.map(_._1.getAbsolutePath)
+          e) with CalculateInterestingLines {
+          def line = source.map(_._2).getOrElse(0)
+          def position = 0
+          def input = source.map(_._1).map(p=> new ByteArrayInputStream(scalax.file.Path(p).bytes.toArray)).getOrElse(null)
+          def sourceName = source.map(_._1.getAbsolutePath).getOrElse(null)
         }
       }
     }
@@ -225,18 +225,18 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
             case e => throw new PlayException(
               "Cannot load plugin",
               "Plugin [" + className + "] cannot been instantiated.",
-              Some(e))
+              e)
           }
         }
         case e: InvocationTargetException => throw new PlayException(
           "Cannot load plugin",
           "An exception occurred during Plugin [" + className + "] initialization",
-          Some(e.getTargetException))
+          e.getTargetException)
         case e: PlayException => throw e
         case e => throw new PlayException(
           "Cannot load plugin",
           "Plugin [" + className + "] cannot been instantiated.",
-          Some(e))
+          e)
       }
     }.flatten
 

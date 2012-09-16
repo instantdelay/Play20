@@ -68,11 +68,11 @@ object Configuration {
 
   private def configError(origin: ConfigOrigin, message: String, e: Option[Throwable] = None): PlayException = {
     import scalax.io.JavaConverters._
-    new PlayException("Configuration error", message, e) with PlayException.ExceptionSource {
-      def line = Option(origin.lineNumber)
-      def position = None
-      def input = Option(origin.url).map(_.asInput)
-      def sourceName = Option(origin.filename)
+    new PlayException.ExceptionSource("Configuration error", message, e.getOrElse(new Throwable)) with CalculateInterestingLines  {
+      def line = origin.lineNumber
+      def position = 0
+      def input = origin.url.openStream
+      def sourceName = origin.filename
       override def toString = "Configuration error: " + getMessage
     }
   }

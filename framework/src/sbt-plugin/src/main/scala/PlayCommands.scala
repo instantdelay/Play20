@@ -23,6 +23,7 @@ trait PlayCommands extends PlayAssetsCompiler with PlayEclipse {
   this: PlayReloader =>
 
   //- mainly scala, mainly java or none
+  val nettyServer = "play.core.server.NettyServer"
 
   val JAVA = "java"
   val SCALA = "scala"
@@ -201,7 +202,7 @@ trait PlayCommands extends PlayAssetsCompiler with PlayEclipse {
       """#!/usr/bin/env sh
 scriptdir=`dirname $0`
 classpath=""" + libs.map { case (jar, path) => "$scriptdir/" + path }.mkString("\"", ":", "\"") + """
-exec java $* -cp $classpath """ + customFileName.map(fn => "-Dconfig.file=`dirname $0`/" + fn + " ").getOrElse("") + """play.core.server.NettyServer `dirname $0`
+exec java $* -cp $classpath """ + customFileName.map(fn => "-Dconfig.file=`dirname $0`/" + fn + " ").getOrElse("") + nettyServer+""" `dirname $0`
 """ /* */ )
     val scripts = Seq(start -> (packageName + "/start"))
 
@@ -257,8 +258,8 @@ exec java $* -cp $classpath """ + customFileName.map(fn => "-Dconfig.file=`dirna
     IO.write(start,
       """|#!/usr/bin/env sh
          |
-         |exec java $@ -cp "`dirname $0`/staged/*" play.core.server.NettyServer `dirname $0`/..
-         |""".stripMargin)
+         |exec java $@ -cp "`dirname $0`/staged/*" %s `dirname $0`/..
+         |""".stripMargin.format(nettyServer))
 
     "chmod a+x %s".format(start.getAbsolutePath) !
 
@@ -528,7 +529,7 @@ exec java $* -cp $classpath """ + customFileName.map(fn => "-Dconfig.file=`dirna
 
       lazy val reloader = newReloader(state, playReload, applicationLoader)
 
-      val mainClass = applicationLoader.loadClass(classOf[play.core.server.NettyServer].getName)
+      val mainClass = applicationLoader.loadClass(nettyServer)
       val mainDev = mainClass.getMethod("mainDev", classOf[SBTLink], classOf[Int])
 
       // Run in DEV
@@ -658,7 +659,7 @@ exec java $* -cp $classpath """ + customFileName.map(fn => "-Dconfig.file=`dirna
 
           import java.lang.{ ProcessBuilder => JProcessBuilder }
           val builder = new JProcessBuilder(Seq(
-            "java") ++ (properties ++ System.getProperties.asScala).map { case (key, value) => "-D" + key + "=" + value } ++ Seq("-Dhttp.port=" + port, "-cp", classpath, "play.core.server.NettyServer", extracted.currentProject.base.getCanonicalPath): _*)
+            "java") ++ (properties ++ System.getProperties.asScala).map { case (key, value) => "-D" + key + "=" + value } ++ Seq("-Dhttp.port=" + port, "-cp", classpath, nettyServer, extracted.currentProject.base.getCanonicalPath): _*)
 
           new Thread {
             override def run {

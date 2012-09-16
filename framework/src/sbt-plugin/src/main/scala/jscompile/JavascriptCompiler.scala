@@ -82,12 +82,12 @@ object JavascriptCompiler {
     }
   }
 
-  case class CompilationException(message: String, jsFile: File, atLine: Option[Int]) extends PlayException(
-    "JS Compilation error", message) with PlayException.ExceptionSource {
-    def line = atLine
-    def position = None
-    def input = Some(scalax.file.Path(jsFile))
-    def sourceName = Some(jsFile.getAbsolutePath)
+  case class CompilationException(message: String, jsFile: File, atLine: Option[Int]) extends PlayException.ExceptionSource (
+    "JS Compilation error", message)  with CalculateInterestingLines {
+    def line = atLine.getOrElse(0)
+    def position = 0
+    def input = new ByteArrayInputStream(scalax.file.Path(jsFile).bytes.toArray)
+    def sourceName =  jsFile.getAbsolutePath
   }
 
   /*

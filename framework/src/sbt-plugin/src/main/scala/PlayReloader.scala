@@ -299,12 +299,12 @@ trait PlayReloader {
                   case e: PlayException => e
                   case e: xsbti.CompileFailed => {
                     getProblems(incomplete).headOption.map(CompilationException(_)).getOrElse {
-                      UnexpectedException(Some("Compilation failed without reporting any problem!?"), Some(e))
+                      new UnexpectedException(Some("Compilation failed without reporting any problem!?"), Some(e))
                     }
                   }
                   case e => UnexpectedException(unexpected = Some(e))
                 }.getOrElse {
-                  UnexpectedException(Some("Compilation task failed without any exception!?"))
+                  new UnexpectedException(Some("Compilation task failed without any exception!?"))
                 }
               }
               .right.map { compilationResult =>

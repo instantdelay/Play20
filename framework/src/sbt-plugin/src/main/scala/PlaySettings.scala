@@ -7,8 +7,6 @@ trait PlaySettings {
   this: PlayCommands =>
 
 
-  lazy val nettyServer = "play.core.server.NettyServer"
-  
   lazy val defaultJavaSettings = Seq[Setting[_]](
 
     templatesImport ++= Seq(

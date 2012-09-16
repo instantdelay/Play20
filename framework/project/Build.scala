@@ -12,6 +12,22 @@ object PlayBuild extends Build {
     import LocalSBT._
     import Tasks._
 
+    lazy val SbtLinkProject = Project(
+        "SBT-link",
+        file("src/sbt-link"),
+        settings = buildSettingsWithMIMA ++ Seq(
+            previousArtifact := Some("play" % {"play_"+previousScalaVersion} % previousVersion),
+            libraryDependencies := runtime,
+            sourceGenerators in Compile <+= sourceManaged in Compile map PlayVersion,
+            publishTo := Some(playRepository),
+            javacOptions ++= Seq("-source","1.6","-target","1.6", "-encoding", "UTF-8"),
+            publishArtifact in (Compile, packageDoc) := false,
+            publishArtifact in (Compile, packageSrc) := true,
+            resolvers += typesafe
+        )
+    ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
+
+
      lazy val PlayUtilsProject = Project(
       "Utils",
       file("src/play-utils"),
@@ -23,7 +39,7 @@ object PlayBuild extends Build {
         publishArtifact in (Compile, packageSrc) := true,
         resolvers += typesafe
       )
-    ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
+    ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*).dependsOn(SbtLinkProject)
 
 
     lazy val TemplatesProject = Project(
@@ -68,21 +84,7 @@ object PlayBuild extends Build {
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
 
     
-    lazy val SbtLinkProject = Project(
-        "SBT-link",
-        file("src/sbt-link"),
-        settings = buildSettingsWithMIMA ++ Seq(
-            previousArtifact := Some("play" % {"play_"+previousScalaVersion} % previousVersion),
-            libraryDependencies := runtime,
-            sourceGenerators in Compile <+= sourceManaged in Compile map PlayVersion,
-            publishTo := Some(playRepository),
-            javacOptions ++= Seq("-source","1.6","-target","1.6", "-encoding", "UTF-8"),
-            publishArtifact in (Compile, packageDoc) := false,
-            publishArtifact in (Compile, packageSrc) := true,
-            resolvers += typesafe
-        )
-    ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
-
+ 
 
     lazy val PlayProject = Project(
         "Play",
