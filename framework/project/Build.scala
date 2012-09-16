@@ -282,7 +282,7 @@ object PlayBuild extends Build {
             "org.apache.commons"                %    "commons-lang3"            %   "3.1",
             "org.apache.ws.commons"             %    "ws-commons-util"          %   "1.0.1" exclude("junit", "junit"),
 
-            ("com.ning"                         %    "async-http-client"        %   "1.7.0" notTransitive())
+            ("com.ning"                         %    "async-http-client"        %   "1.7.6" notTransitive())
               .exclude("org.jboss.netty", "netty")
             ,
 
@@ -340,7 +340,7 @@ object PlayBuild extends Build {
 
         val consoleDependencies = Seq(
             "com.github.scala-incubator.io"     %%   "scala-io-file"            %   "0.4.0",
-            "net.databinder.giter8" % "giter8_2.9.1" % "0.4.5"
+            "net.databinder.giter8"             %    "giter8_2.9.1"             %   "0.5.0"
         )
 
         val templatesDependencies = Seq(

@@ -62,6 +62,8 @@ trait PlaySettings {
 
   lazy val defaultSettings = Seq[Setting[_]](
 
+    playPlugin := false,
+
     resolvers ++= Seq(
       "Typesafe Releases Repository" at "http://repo.typesafe.com/typesafe/releases/",
       "Typesafe Snapshots Repository" at "http://repo.typesafe.com/typesafe/snapshots/"
@@ -84,7 +86,13 @@ trait PlaySettings {
 
     distDirectory <<= baseDirectory / "dist",
 
-    libraryDependencies += "play" %% "play" % play.core.PlayVersion.current,
+    libraryDependencies <+= (playPlugin) { isPlugin =>
+      val d = "play" %% "play" % play.core.PlayVersion.current
+      if(isPlugin)
+         d % "provided"
+      else
+        d
+    },
 
     libraryDependencies += "play" %% "play-test" % play.core.PlayVersion.current % "test",
 
@@ -113,7 +121,7 @@ trait PlaySettings {
 
     sourceGenerators in Compile <+= (confDirectory, sourceManaged in Compile, routesImport) map RouteFiles,
 
-    // Adds config directory's source files to continuous hot reloading 
+    // Adds config directory's source files to continuous hot reloading
     watchSources <+= confDirectory map { all => all },
 
     sourceGenerators in Compile <+= (sourceDirectory in Compile, sourceManaged in Compile, templatesTypes, templatesImport) map ScalaTemplates,
