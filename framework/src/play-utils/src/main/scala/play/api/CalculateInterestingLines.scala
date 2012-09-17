@@ -5,8 +5,8 @@ trait CalculateInterestingLines {
   self: PlayException.ExceptionSource =>
 
   def interestingLines(border: Int = 4): InterestingLines = {
-      val i: Option[InterestingLines] = for (f <- Option(input).map(_.asInput);  
-           val (first, last) = f.slurpString.split('\n').splitAt(line - 1); 
+      val i: Option[InterestingLines] = for (f <- Option(input);  
+           val (first, last) = f.split('\n').splitAt(line - 1); 
            focus <- last.headOption) yield {
         val before = first.takeRight(border)
         val after = last.drop(1).take(border)

@@ -136,7 +136,7 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
    */
   private[play] def handleError(request: RequestHeader, e: Throwable): Result = try {
     e match {
-      case e: PlayException.UsefulException => throw e
+      case e: UsefulException => throw e
       case e: Throwable => {
 
         val source = sources.flatMap(_.sourceFor(e))
@@ -147,7 +147,7 @@ class Application(val path: File, val classloader: ClassLoader, val sources: Opt
           e) with CalculateInterestingLines {
           def line = source.map(_._2).getOrElse(0)
           def position = 0
-          def input = source.map(_._1).map(p=> new ByteArrayInputStream(scalax.file.Path(p).bytes.toArray)).getOrElse(null)
+          def input = source.map(_._1).map(p=> scalax.file.Path(p).slurpString).getOrElse(null)
           def sourceName = source.map(_._1.getAbsolutePath).getOrElse(null)
         }
       }

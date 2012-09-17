@@ -485,7 +485,7 @@ exec java $* -cp $classpath """ + customFileName.map(fn => "-Dconfig.file=`dirna
         val sharedClasses = Seq(
           classOf[play.core.SBTLink].getName,
           classOf[play.core.server.ServerWithStop].getName,
-          classOf[play.api.PlayException.UsefulException].getName,
+          classOf[play.api.UsefulException].getName,
           classOf[play.api.PlayException.ExceptionSource].getName,
           classOf[play.api.PlayException.ExceptionAttachment].getName)
 

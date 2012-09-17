@@ -5,7 +5,7 @@ import java.io._
 import com.typesafe.config._
 
 import scala.collection.JavaConverters._
-
+import PlayException.ExceptionSource
 /**
  * This object provides a set of operations to create `Configuration` values.
  *
@@ -66,12 +66,12 @@ object Configuration {
     Configuration(ConfigFactory.parseMap(data.asJava))
   }
 
-  private def configError(origin: ConfigOrigin, message: String, e: Option[Throwable] = None): PlayException = {
+  private def configError(origin: ConfigOrigin, message: String, e: Option[Throwable] = None): ExceptionSource = {
     import scalax.io.JavaConverters._
-    new PlayException.ExceptionSource("Configuration error", message, e.getOrElse(new Throwable)) with CalculateInterestingLines  {
+    new ExceptionSource("Configuration error", message, e.getOrElse(new Throwable)) with CalculateInterestingLines  {
       def line = origin.lineNumber
       def position = 0
-      def input = origin.url.openStream
+      def input = origin.url.asInput.slurpString
       def sourceName = origin.filename
       override def toString = "Configuration error: " + getMessage
     }
@@ -545,7 +545,7 @@ case class Configuration(underlying: Config) {
    * @param e the related exception
    * @return a configuration exception
    */
-  def reportError(path: String, message: String, e: Option[Throwable] = None): PlayException = {
+  def reportError(path: String, message: String, e: Option[Throwable] = None): ExceptionSource = {
     Configuration.configError(if (underlying.hasPath(path)) underlying.getValue(path).origin else underlying.root.origin, message, e)
   }
 
@@ -562,7 +562,7 @@ case class Configuration(underlying: Config) {
    * @param e the related exception
    * @return a configuration exception
    */
-  def globalError(message: String, e: Option[Throwable] = None): PlayException = {
+  def globalError(message: String, e: Option[Throwable] = None): ExceptionSource = {
     Configuration.configError(underlying.root.origin, message, e)
   }
 

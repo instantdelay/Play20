@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Helper for `PlayException`.
  */
-public class PlayException extends RuntimeException{
+public class PlayException extends UsefulException{
 
  private final AtomicLong generator = new AtomicLong(System.currentTimeMillis());
   
@@ -16,27 +16,6 @@ public class PlayException extends RuntimeException{
     private String nextId() { 
       return java.lang.Long.toString(generator.incrementAndGet(), 26);
     }
-
-    /**
-     * Exception title.
-     */
-    public final String title;
-
-    /**
-     * Exception description.
-     */
-    public final String description; 
-
-    /**
-     * Exception cause if defined.
-     */
-    public final Throwable cause;
-
-
-    /**
-     * Unique id for this exception.
-     */
-    public final String id;
 
     public PlayException(String title, String description, Throwable cause) {
         super(title + "[" + description + "]",cause);
@@ -52,19 +31,6 @@ public class PlayException extends RuntimeException{
         this.id = nextId();
         this.cause = null;
     }
-
-
-  /**
-   * A UsefulException is something useful to display in the User browser.
-   */
-  public static class UsefulException extends PlayException {
-    public UsefulException(String title, String description,  Throwable cause) {
-      super(title, description,cause);
-    }
-    public UsefulException(String title, String description) {
-      super(title, description);
-    }
-  }
 
   /**
    * Adds source attachment to a Play exception.
@@ -91,7 +57,7 @@ public class PlayException extends RuntimeException{
     /**
      * Input stream used to read the source content.
      */
-    public abstract java.io.InputStream input();
+    public abstract String input();
 
     /**
      * The source file name if defined.

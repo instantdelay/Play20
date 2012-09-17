@@ -202,7 +202,7 @@ object Messages {
           throw new PlayException.ExceptionSource("Configuration error", message) with CalculateInterestingLines  {
             def line = in.pos.line
             def position = in.pos.column - 1
-            def input = new java.io.ByteArrayInputStream(messageInput.bytes.toArray)
+            def input = messageInput.slurpString
             def sourceName = messageSourceName
           }
         }

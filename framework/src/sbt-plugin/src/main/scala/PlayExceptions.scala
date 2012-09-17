@@ -20,7 +20,7 @@ trait PlayExceptions {
     "Compilation error", filterAnnoyingErrorMessages(problem.message)) with CalculateInterestingLines{
     def line = problem.position.line.map(m => m.asInstanceOf[Int]).getOrElse(0)
     def position = problem.position.pointer.map(m => m.asInstanceOf[Int]).getOrElse(0)
-    def input = problem.position.sourceFile.map(p=> new ByteArrayInputStream(scalax.file.Path(p).bytes.toArray)).getOrElse(null)
+    def input = problem.position.sourceFile.map(p=> scalax.file.Path(p).slurpString).getOrElse(null)
     def sourceName = problem.position.sourceFile.map(_.getAbsolutePath).getOrElse(null)
     override def toString = "in " + Option(sourceName).getOrElse("") + " - " + super.toString()
   }
@@ -29,7 +29,7 @@ trait PlayExceptions {
     "Compilation error", message) with CalculateInterestingLines {
     def line = atLine
     def position = column
-    def input = new ByteArrayInputStream(scalax.file.Path(source).bytes.toArray)
+    def input = scalax.file.Path(source).slurpString
     def sourceName = source.getAbsolutePath
     override def toString = "in " + source.getAbsolutePath + " - " + super.toString()
   }
@@ -38,7 +38,7 @@ trait PlayExceptions {
     "Compilation error", message) with CalculateInterestingLines {
     def line = atLine.getOrElse(0)
     def position = column.getOrElse(0)
-    def input = new ByteArrayInputStream(scalax.file.Path(source).bytes.toArray)
+    def input = scalax.file.Path(source).slurpString
     def sourceName = source.getAbsolutePath
     override def toString = "in " + source.getAbsolutePath + " - " + super.toString()
   }
@@ -47,7 +47,7 @@ trait PlayExceptions {
     "Compilation error", message) with CalculateInterestingLines{
     def line = atLine
     def position = atColumn
-    def input = source.filter(_.exists()).map(p=> new ByteArrayInputStream(scalax.file.Path(p).bytes.toArray)).getOrElse(null)
+    def input = source.filter(_.exists()).map(p=> scalax.file.Path(p).slurpString).getOrElse(null)
     def sourceName = source.map(_.getAbsolutePath).getOrElse(null)
     override def toString = "in " + Option(sourceName).getOrElse("") + " - " + super.toString()
 

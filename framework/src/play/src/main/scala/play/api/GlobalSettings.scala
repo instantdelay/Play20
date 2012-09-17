@@ -85,7 +85,7 @@ trait GlobalSettings {
       case app => views.html.defaultpages.error.f
     }.getOrElse(views.html.defaultpages.devError.f) {
       ex match {
-        case e: PlayException.UsefulException => e
+        case e: UsefulException => e
         case e => play.api.UnexpectedException(unexpected = Some(e))
       }
     })

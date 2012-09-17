@@ -86,7 +86,7 @@ object JavascriptCompiler {
     "JS Compilation error", message)  with CalculateInterestingLines {
     def line = atLine.getOrElse(0)
     def position = 0
-    def input = new ByteArrayInputStream(scalax.file.Path(jsFile).bytes.toArray)
+    def input = scalax.file.Path(jsFile).slurpString
     def sourceName =  jsFile.getAbsolutePath
   }
 

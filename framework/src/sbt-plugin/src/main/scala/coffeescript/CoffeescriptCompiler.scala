@@ -87,6 +87,6 @@ case class CompilationException(message: String, coffeeFile: File, atLine: Optio
   "Compilation error", message) with CalculateInterestingLines{
   def line = atLine.getOrElse(0)
   def position = 0
-  def input = new ByteArrayInputStream( scalax.file.Path(coffeeFile).bytes.toArray)
+  def input = scalax.file.Path(coffeeFile).slurpString
   def sourceName = coffeeFile.getAbsolutePath
 }
